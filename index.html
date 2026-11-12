@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Neon / Local light control</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">BLUETOOTH / LOCAL CONTROL</p>
+        <h1>Set the <span>glow.</span></h1>
+        <p class="intro">Your lights. Your space. No account, no cloud.</p>
+      </header>
+
+      <section class="card" aria-labelledby="connection-title">
+        <div class="heading">
+          <h2 id="connection-title">Connection</h2>
+          <span id="connection-state" class="badge">Disconnected</span>
+        </div>
+        <p id="device-name">Close LotusLanternX on your phone before connecting.</p>
+        <p id="python-note" class="hint" hidden>Python controls Bluetooth and keeps playing when this page is closed. Select your office lights once. After Play, the service automatically reconnects to that same device and restarts the sequence when it returns to range. Stop disables automatic playback. Your Mac must be awake; neither the display nor this tab needs to stay on.</p>
+        <div id="python-devices" hidden>
+          <label for="service-devices">Nearby BLEDOM lights</label>
+          <select id="service-devices"><option value="">Scan to find lights</option></select>
+          <button id="select-service-device" type="button" disabled>Select these lights</button>
+        </div>
+        <div class="actions">
+          <button id="connect" class="primary" type="button">Connect lights</button>
+          <button id="disconnect" type="button" disabled>Disconnect</button>
+        </div>
+        <label for="profile">Controller protocol</label>
+        <select id="profile">
+          <option value="lantern">Lotus Lantern / standard RGB controller</option>
+          <option value="melk">Lotus Lamp X / MELK controller</option>
+        </select>
+        <p class="hint">Start with Lotus Lantern. Commands vary by hardware; a successful write does not confirm the lights changed.</p>
+        <p id="power-note" class="hint" hidden>Power commands are not yet verified for the MELK profile and are disabled. Brightness 0% can dim the lights to black.</p>
+      </section>
+
+      <section class="card" aria-labelledby="controls-title">
+        <h2 id="controls-title">Light controls</h2>
+        <fieldset id="controls" disabled>
+          <legend class="sr-only">Power, color, and brightness</legend>
+          <div class="actions">
+            <button id="power-on" type="button">Power on</button>
+            <button id="power-off" type="button">Power off</button>
+          </div>
+
+          <label for="color">Color <output id="color-value" for="color">#FF3399</output></label>
+          <div class="color-row">
+            <input id="color" type="color" value="#ff3399">
+            <button id="apply-color" type="button">Apply color</button>
+          </div>
+          <div class="presets" aria-label="Color presets">
+            <button class="pink" data-color="#ff3399" type="button">Pink</button>
+            <button class="purple" data-color="#8800ff" type="button">Purple</button>
+            <button class="blue" data-color="#0088ff" type="button">Blue</button>
+            <button class="mint" data-color="#00ffaa" type="button">Mint</button>
+            <button class="amber" data-color="#ff8800" type="button">Amber</button>
+            <button data-color="#ffffff" type="button">White</button>
+          </div>
+
+          <label for="brightness">Brightness <output id="brightness-value" for="brightness">75%</output></label>
+          <input id="brightness" type="range" min="0" max="100" step="1" value="75">
+          <button id="apply-brightness" type="button">Apply brightness</button>
+          <p class="hint">Controls show selected values, not readings from the lights. Connecting does not automatically change them.</p>
+        </fieldset>
+      </section>
+
+      <section class="card" aria-labelledby="sequences-title">
+        <h2 id="sequences-title">Color sequences</h2>
+        <p class="hint">Hold each color, then fade to the next. Repeat also fades the last color back to the first.</p>
+        <fieldset id="sequence-editor">
+          <legend class="sr-only">Sequence editor and saved sequences</legend>
+          <label for="sequence-presets">Built-in presets</label>
+          <select id="sequence-presets"></select>
+          <div class="actions">
+            <button id="load-preset" type="button">Load preset</button>
+          </div>
+          <p class="hint">Holiday presets repeat continuously. Most hold each color for 5 seconds, then fade for 5 seconds; Thanksgiving uses 8 / 6 seconds and New Year's uses 3 / 3 seconds. Load a preset to see or customize its colors and timing; your saved sequences are not changed. Colors may look different on your lights: adjust the color pickers and save a custom version.</p>
+          <label id="saved-sequences-label" for="saved-sequences">Saved in this browser</label>
+          <select id="saved-sequences">
+            <option value="">No saved sequences</option>
+          </select>
+          <div class="actions">
+            <button id="load-sequence" type="button" disabled>Load</button>
+            <button id="delete-sequence" type="button" disabled>Delete saved</button>
+            <button id="example-sequence" type="button">White / blue / red example</button>
+          </div>
+          <label for="sequence-name">Sequence name</label>
+          <input id="sequence-name" type="text" maxlength="80" value="White to blue to red">
+          <ol id="sequence-steps" class="sequence-steps"></ol>
+          <div class="actions">
+            <button id="add-step" type="button">Add color</button>
+            <button id="save-sequence" type="button">Save sequence</button>
+            <button id="import-browser-sequences" type="button" hidden>Import browser saves to Mac</button>
+          </div>
+          <label class="checkbox-label" for="repeat-sequence">
+            <input id="repeat-sequence" type="checkbox" checked> Repeat continuously
+          </label>
+        </fieldset>
+        <div class="actions">
+          <button id="play-sequence" class="primary" type="button" disabled>Play sequence</button>
+          <button id="stop-sequence" type="button" disabled>Stop</button>
+        </div>
+        <p id="sequence-state" role="status" aria-live="polite">Not playing.</p>
+        <p id="playback-help" class="hint">Playback uses the current brightness and does not turn the lights on automatically. Keep this tab visible, your Mac awake, and Bluetooth connected. Hiding the tab stops playback. Stop leaves the last color on the lights. Saves stay in this browser at this localhost address; clearing browser data removes them.</p>
+      </section>
+      <template id="sequence-step-template">
+        <li class="sequence-step">
+          <div class="step-fields">
+            <div><label data-label="color">Color</label><input data-field="color" type="color"><output class="step-hex"></output></div>
+            <div><label data-label="hold">Hold (seconds)</label><input data-field="hold" type="number" min="0" max="3600" step="any" required></div>
+            <div><label data-label="fade">Fade to next (seconds)</label><input data-field="fade" type="number" min="0" max="3600" step="any" required></div>
+          </div>
+          <div class="actions">
+            <button data-action="copy-color" type="button">Use Light controls color</button>
+            <button data-action="up" type="button">Move up</button>
+            <button data-action="down" type="button">Move down</button>
+            <button data-action="remove" type="button">Remove</button>
+          </div>
+        </li>
+      </template>
+
+      <p id="status" role="status" aria-live="polite">Ready to connect. Keep the lights powered and nearby.</p>
+      <details class="card">
+        <summary>Connection help &amp; command log</summary>
+        <div id="browser-help">
+        <p>Use Chrome or Edge at <strong>http://lotuslantern.localhost:49173</strong> (the default address). Enable Bluetooth on your Mac and allow Chrome access in System Settings &gt; Privacy &amp; Security &gt; Bluetooth.</p>
+        <p>Select the lights in Chrome's chooser. Only device names starting with BLEDOM or ELK-BLEDOM are shown (case-sensitive). Chrome supports prefix filtering, not arbitrary substring matching. Only select a device you own. If it does not appear, close the phone app, power-cycle the controller, and try again. Controllers with other names or no advertised name are excluded.</p>
+        <p>If service discovery fails or the lights ignore commands, this hardware may use a different protocol. Share the device name and the error below to help identify it. Sequences run in this browser; built-in controller effects and scheduling are not included until the controller model is confirmed.</p>
+        </div>
+        <p id="python-help" hidden>Close LotusLanternX and any browser Bluetooth connections before connecting Python. Allow Bluetooth for the Python interpreter or terminal in macOS Privacy &amp; Security settings. Only the selected BLEDOM device is used; being out of range is normal. Connection errors appear in the service status; the command log below is for this page only. Saved sequences and playback settings are in ~/Library/Application Support/LotusLantern/state.json. The service is local to this Mac, not connected to the public website.</p>
+        <pre id="log" aria-label="Command log">No commands sent.</pre>
+      </details>
+      <footer>Direct Bluetooth connection. No external scripts or services.</footer>
+    </main>
+  </body>
+</html>

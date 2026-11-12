@@ -1,0 +1,58 @@
+:root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; background: #0b0d16; color: #f1f1fa; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(ellipse at top right, #29132f, transparent 55%); min-height: 100vh; }
+main { max-width: 680px; padding: 52px 24px; margin: auto; }
+.eyebrow { font-size: .75rem; letter-spacing: .2em; color: #c6accd; }
+h1 { font-size: clamp(2.8rem, 9vw, 4.6rem); letter-spacing: -.06em; margin: 12px 0; }
+h1 span { color: #ff72bd; text-shadow: 0 0 36px #ff339955; }
+.intro, footer, .hint, #device-name { color: #b7b5ca; }
+.intro { margin-bottom: 32px; }
+.card { background: #161824; border: 1px solid #333143; border-radius: 18px; padding: 24px; margin: 18px 0; }
+h2 { font-size: 1.1rem; margin: 0 0 18px; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.heading h2 { margin: 0; }
+.badge { font-size: .8rem; border: 1px solid #63546c; border-radius: 20px; padding: 5px 10px; }
+.badge.connected { color: #7befbf; border-color: #3d8468; }
+button, select { font: inherit; background: #252739; color: #f1f1fa; border: 1px solid #4d4d64; border-radius: 10px; padding: 11px 16px; }
+button { cursor: pointer; }
+button:hover:not(:disabled) { background: #36364d; }
+button.primary { background: #ee5ca9; color: #170d18; font-weight: 700; border-color: #ee5ca9; }
+button.primary:hover:not(:disabled) { background: #ff8fcb; }
+button:disabled, fieldset:disabled { opacity: .5; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 3px solid #ff9dd3; outline-offset: 4px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+label { display: flex; justify-content: space-between; gap: 12px; margin: 24px 0 10px; font-size: .9rem; }
+select { width: 100%; }
+.hint { font-size: .8rem; line-height: 1.6; }
+fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+.color-row { display: flex; gap: 14px; align-items: center; }
+input[type="color"] { width: 76px; height: 48px; padding: 4px; border: 1px solid #4d4d64; border-radius: 10px; background: #252739; cursor: pointer; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.presets button { font-size: .85rem; padding: 8px 12px; }
+.pink { border-color: #ff3399; }
+.purple { border-color: #aa66ff; }
+.blue { border-color: #0088ff; }
+.mint { border-color: #00ffaa; }
+.amber { border-color: #ff8800; }
+input[type="range"] { width: 100%; accent-color: #ee5ca9; margin: 10px 0 20px; }
+output { color: #ff9dd3; font-variant-numeric: tabular-nums; }
+#status { line-height: 1.6; border-left: 3px solid #827b9c; padding: 8px 14px; }
+#status.error { color: #ffb4b4; border-color: #ff7777; }
+summary { cursor: pointer; font-weight: 600; }
+details p { font-size: .85rem; line-height: 1.7; color: #b7b5ca; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #0b0d16; padding: 14px; border-radius: 10px; font-size: .75rem; line-height: 1.7; max-height: 260px; overflow-y: auto; }
+footer { text-align: center; font-size: .75rem; margin-top: 28px; }
+input[type="text"], input[type="number"] { font: inherit; background: #0b0d16; color: #f1f1fa; border: 1px solid #4d4d64; border-radius: 10px; padding: 11px; width: 100%; }
+.sequence-steps { padding-left: 24px; }
+.sequence-step { padding: 4px 0 12px; border-bottom: 1px solid #333143; }
+.step-fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.step-fields label { display: block; font-size: .8rem; margin-top: 16px; }
+.step-hex { display: block; font-size: .75rem; margin-top: 6px; }
+.sequence-step .actions { margin: 12px 0 0; gap: 6px; }
+.sequence-step button { font-size: .8rem; padding: 8px 10px; }
+.checkbox-label { justify-content: flex-start; align-items: center; }
+input[type="checkbox"] { accent-color: #ee5ca9; width: 18px; height: 18px; }
+#sequence-state { font-size: .9rem; color: #ff9dd3; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 480px) { main { padding: 28px 16px; } .card { padding: 18px; } .heading { align-items: flex-start; flex-direction: column; } }
